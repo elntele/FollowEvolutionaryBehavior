@@ -1,0 +1,55 @@
+# Bytecode e caches Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Arquivos de log ou execução
+*.log
+*.out
+*.tmp
+*.bak
+*.swp
+
+# Diretórios e arquivos de IDEs
+.vscode/
+.idea/
+
+# Ambientes virtuais
+.venv/
+env/
+venv/
+
+# Arquivos de configurações locais
+*.env
+*.ini
+*.cfg
+
+# Arquivos de gráficos e imagens geradas
+*.png
+*.jpg
+*.jpeg
+*.svg
+*.pdf
+
+# Arquivos CSV, TXT ou outros resultados intermediários
+*.csv
+*.tsv
+*.txt
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Jupyter notebooks (se estiver usando)
+.ipynb_checkpoints/
+*.ipynb
+
+# Diretórios de build
+build/
+dist/
+*.egg-info/
+
+# Arquivos exportados do Excel
+*.xlsx
+*.xls
