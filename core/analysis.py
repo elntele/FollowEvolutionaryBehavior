@@ -115,3 +115,30 @@ def analisar_execucoes(lista_arquivos, n_execucoes=30):
         "medias_pareto_solucoes": medias_pareto_solucoes,
         "pareto_frentes": medias_qtd_de_frentes_paretos
     }
+
+
+def separa_frentes(paretos_raw: list[str]) -> list[list[tuple[float, float]]]:
+    """
+    Recebe uma lista de strings (cada uma com dois objetivos separados por vírgula) e separa em frentes de Pareto.
+    """
+    def domina(a, b):
+        return (a[0] <= b[0] and a[1] <= b[1]) and (a[0] < b[0] or a[1] < b[1])
+
+    solucoes = [tuple(map(float, linha.split(","))) for linha in paretos_raw]
+    frentes = []
+
+    while solucoes:
+        frente = []
+        restantes = []
+
+        for s in solucoes:
+            dominado = any(domina(o, s) for o in solucoes if o != s)
+            if not dominado:
+                frente.append(s)
+            else:
+                restantes.append(s)
+
+        frentes.append(frente)
+        solucoes = restantes
+
+    return frentes

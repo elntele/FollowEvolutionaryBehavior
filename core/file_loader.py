@@ -24,3 +24,14 @@ def find_execution_files(base_path):
         raise FileNotFoundError("Nenhum arquivo printExecution*.txt encontrado nas subpastas.")
 
     return execution_files
+
+def ler_paretos(pathParetos: str) -> list[str]:
+    """
+    Lê o arquivo FUNXX do caminho fornecido e retorna uma lista de strings, cada linha representando uma solução.
+    """
+    try:
+        with open(pathParetos, 'r') as file:
+            return [linha.strip() for linha in file if linha.strip()]
+    except FileNotFoundError:
+        print(f"Arquivo de paretos não encontrado em: {pathParetos}")
+        return []

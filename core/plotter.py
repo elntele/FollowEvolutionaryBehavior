@@ -22,6 +22,9 @@ def plot_medias_por_iteracao(dados, titulo, ylabel, inicio, fim, passo, max_y, e
     plt.title(titulo, fontsize=18, fontweight='bold')
     plt.xlabel("Geração", fontsize=16, fontweight='bold')
     plt.ylabel(ylabel, fontsize=16, fontweight='bold')
+    #controle de largura da numeração dos eixos:
+    plt.xticks(fontsize=12, fontweight='bold')
+    plt.yticks(fontsize=12, fontweight='bold')
 
     # Eixo Y: de 0 a max_y, com marcações de 5 em 5
     plt.yticks(np.arange(0, max_y + 5, 5))  # Garante que o max_y apareça
@@ -217,6 +220,9 @@ def plot_histograma(
     plt.yticks(np.linspace(0, max_y, 6))
     plt.grid(axis='y', linestyle='--', linewidth=0.5)
     plt.tight_layout()
+    # controle de largura da numeração dos eixos:
+    plt.xticks(fontsize=12, fontweight='bold')
+    plt.yticks(fontsize=12, fontweight='bold')
     plt.show()
 
 
@@ -276,6 +282,9 @@ def plot_tempo_execucao(dados, titulo, ylabel, inicio, fim, passo, extras=None, 
     plt.ylabel(ylabel)
     plt.grid(axis='y', linestyle='--', linewidth=0.5)
     plt.tight_layout()
+    # controle de largura da numeração dos eixos:
+    plt.xticks(fontsize=12, fontweight='bold')
+    plt.yticks(fontsize=12, fontweight='bold')
     plt.show()
 
 
@@ -294,4 +303,95 @@ def plot_pareto(pareto_solucoes: dict, pareto_frentes: dict):
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
+    # controle de largura da numeração dos eixos:
+    plt.xticks(fontsize=12, fontweight='bold')
+    plt.yticks(fontsize=12, fontweight='bold')
     plt.show()
+
+
+# import matplotlib.pyplot as plt
+#
+# def plotar_frentes_pareto(frentes: list[list[tuple[float, float]]]):
+#     """
+#     Plota dois gráficos:
+#     1. Todas as frentes de Pareto
+#     2. Apenas a primeira frente (mais convergida)
+#     """
+#     # Gráfico com todas as frentes
+#     plt.figure(figsize=(10, 5))
+#     for idx, frente in enumerate(frentes):
+#         xs, ys = zip(*frente)
+#         plt.scatter(xs, ys, label=f"Frente {idx+1}", s=20)
+#     plt.title("Todas as Frentes de Pareto")
+#     plt.xlabel("Probabilidade de Bloqueio")
+#     plt.ylabel("CAPEX")
+#     plt.legend()
+#     plt.grid(True)
+#     plt.tight_layout()
+#     plt.show()
+#
+#     # Gráfico com apenas a primeira frente
+#     if frentes:
+#         xs, ys = zip(*frentes[0])
+#         plt.figure(figsize=(8, 5))
+#         plt.scatter(xs, ys, color='blue')
+#         plt.title("Frente de Pareto Mais Convergida")
+#         plt.xlabel("Probabilidade de Bloqueio")
+#         plt.ylabel("CAPEX")
+#         plt.grid(True)
+#         plt.tight_layout()
+#         plt.show()
+
+
+import matplotlib.pyplot as plt
+import itertools
+
+def plotar_frentes_pareto(frentes: list[list[tuple[float, float]]]):
+    """
+    Plota dois gráficos:
+    1. Todas as frentes de Pareto com cores e marcadores diferentes
+    2. Apenas a primeira frente (mais convergida), com o mesmo estilo do gráfico anterior
+    """
+    marcadores = ['o', 's', 'D', '^', 'v', '*', 'P', 'X', 'h', 'H']
+    cores = ['blue', 'green', 'red', 'orange', 'purple', 'brown', 'pink', 'olive', 'cyan', 'magenta']
+    estilos = itertools.cycle(zip(marcadores, cores))
+
+    # Grava o estilo da primeira frente
+    marcador_convergido, cor_convergida = next(estilos)
+
+    # Gráfico com todas as frentes
+    plt.figure(figsize=(10, 6))
+    for idx, frente in enumerate(frentes):
+        xs, ys = zip(*frente)
+        if idx == 0:
+            marcador, cor = marcador_convergido, cor_convergida
+        else:
+            marcador, cor = next(estilos)
+        #s=60 define o tamanho dos marcadores (pontos) para todas as frentes.
+        plt.scatter(xs, ys, label=f"Frente {idx + 1}", marker=marcador, color=cor, s=60)
+
+    plt.title("Todas as Frentes de Pareto", fontsize=14, fontweight='bold')
+    plt.xlabel("Probabilidade de Bloqueio", fontsize=12, fontweight='bold')
+    plt.ylabel("CAPEX", fontsize=12, fontweight='bold')
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    # controle de largura da numeração dos eixos:
+    plt.xticks(fontsize=12, fontweight='bold')
+    plt.yticks(fontsize=12, fontweight='bold')
+    plt.show()
+
+    # Gráfico com apenas a primeira frente, com o mesmo estilo usado antes
+    if frentes:
+        xs, ys = zip(*frentes[0])
+        plt.figure(figsize=(8, 5))
+        plt.scatter(xs, ys, color=cor_convergida, marker=marcador_convergido, s=80)
+        plt.title("Frente de Pareto Mais Convergida", fontsize=14, fontweight='bold')
+        plt.xlabel("Probabilidade de Bloqueio", fontsize=12, fontweight='bold')
+        plt.ylabel("CAPEX", fontsize=12, fontweight='bold')
+        plt.grid(True)
+        plt.tight_layout()
+        # controle de largura da numeração dos eixos:
+        plt.xticks(fontsize=12, fontweight='bold')
+        plt.yticks(fontsize=12, fontweight='bold')
+        plt.show()

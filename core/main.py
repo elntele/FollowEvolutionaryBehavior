@@ -1,5 +1,5 @@
-from core.file_loader import find_execution_files
-from core.analysis import analisar_execucoes
+from core.file_loader import find_execution_files, ler_paretos
+from core.analysis import analisar_execucoes, separa_frentes
 from core.plotter import *
 
 arquivos = find_execution_files(r'C:\Users\elnte\Desktop\result 24.6.25\CN-C+MN-C')
@@ -50,8 +50,6 @@ plot_tempo_execucao(
     max_horas=20
 )
 
-
-
 plot_histograma(
     resumo['medias_de_valores_de_restr_eq_inadeq'],
     "Média da méria dos valores de restrição de inadequação de equipamentos a cada geração",
@@ -63,7 +61,6 @@ plot_histograma(
     extras=[8000, 20000, 100000],
     usar_fitness=True
 )
-
 
 plot_histograma(
     resumo['std_da_media_dos_valores_de_restri_de_eq_inadeq'],
@@ -80,3 +77,18 @@ plot_pareto(
     resumo['medias_pareto_solucoes'],
     resumo['pareto_frentes']
 )
+
+pathParetos = "C:/Users/elnte/Desktop/result 24.6.25/SBX_CROS+MN-C/VARSandFUNS/execution5/FUN520.CSV"
+
+try:
+    # Etapa 1: Leitura do arquivo
+    linhas = ler_paretos(pathParetos)
+
+    # Etapa 2: Separação em frentes de Pareto
+    frentes = separa_frentes(linhas)
+
+    # Etapa 3: Plotagem dos gráficos
+    plotar_frentes_pareto(frentes)
+
+except FileNotFoundError:
+    print(f"Arquivo {pathParetos} não encontrado. Pulando visualização de frentes.")
