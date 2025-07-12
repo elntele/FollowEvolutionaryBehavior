@@ -28,16 +28,16 @@ print(resumo['pareto_frentes'])
 
 plot_medias_por_iteracao(
     resumo['medias_qtd_sol_com_restri_ca'],
-    "Média da quantidade de soluções com restrição de conectividade algébrica por geração",
-    "Número de soluções com nós isolados",
+    "Média da quantidade de soluções com restrição de \n conectividade algébrica por marco de avaliação de aptidão",
+    "Número de soluções\n com nós isolados",
     200, 2001, 100, 100,  extras=[8000, 20000, 100000],
     usar_fitness=True
 )
 
 plot_medias_por_iteracao(
     resumo['medias_qtd_sol_com_restri_equinad'],
-    "Média de soluções com inadequação de equipamentos por geração",
-    "Quantidade de soluções com restrição 2",
+    "Média de soluções com inadequação de equipamentos\n por marco de avaliação de aptidão",
+    "Quantidade de soluções\n com restrição 2",
     200, 4001, 100, 100, [8000, 20000, 50000, 100000], True
 )
 
@@ -53,8 +53,8 @@ plot_tempo_execucao(
 
 plot_histograma(
     resumo['medias_de_valores_de_restr_eq_inadeq'],
-    "Valor médio das 30 execuções da média dos valores restrição de inadequação de equipamentos das 100 soluções a cada marco de avaliação de aptidão",
-    "Valor médio da média de inadequação nas 30 execuções",
+    "Valor médio das 30 execuções da média dos valores restrição\n de inadequação de equipamentos das 100 soluções\n a cada marco de avaliação de aptidão",
+    "Valor médio da média de\n inadequação nas 30 execuções",
     max_y=0.6,
     inicio=200,
     fim=4001,
@@ -65,8 +65,8 @@ plot_histograma(
 
 plot_histograma(
     resumo['std_da_media_dos_valores_de_restri_de_eq_inadeq'],
-    "Valor médio das 30 execuções do desvio padrão dos valores de restrição de inadequação de equipamentos a cada marco de avaliação de aptidão",
-    "Desvio padrão da inadequação",
+    "Valor médio das 30 execuções do desvio\n padrão dos valores de restrição de inadequação\n de equipamentos a cada marco de avaliação de aptidão",
+    "Valor médio do desvio\n padrão da inadequação\n de eqquipamentos\n nas 30 execuções",
     max_y=0.12,
     inicio=200,
     fim=4001,

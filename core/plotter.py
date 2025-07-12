@@ -1,46 +1,18 @@
-from matplotlib.font_manager import FontProperties
 import numpy as np
+import itertools
+from datetime import timedelta
+import matplotlib.pyplot as plt
+import re
 
 
-#
-# def plot_medias_por_iteracao(dados, titulo, ylabel, inicio, fim, passo, max_y, extras=None):
-#
-#     plt.figure(figsize=(12, 5))
-#
-#     # Iterações desejadas no eixo X
-#     if extras is not None:
-#         iteracoes_desejadas = list(range(inicio, fim, passo)) + extras
-#     else:
-#         iteracoes_desejadas = list(range(inicio, fim, passo))
-#
-#     valores = [dados.get(i, 0.0) for i in iteracoes_desejadas]
-#     categorias = [str(i) for i in iteracoes_desejadas]
-#
-#     # Criação do gráfico de barras com largura ajustada
-#     plt.bar(categorias, valores, width=0.4)
-#
-#     # Configurações de título e eixos
-#     plt.title(titulo, fontsize=18, fontweight='bold')
-#     plt.xlabel("Geração", fontsize=16, fontweight='bold')
-#     plt.ylabel(ylabel, fontsize=16, fontweight='bold')
-#     #controle de largura da numeração dos eixos:
-#     plt.xticks(fontsize=12, fontweight='bold')
-#     plt.yticks(fontsize=12, fontweight='bold')
-#
-#     # Eixo Y: de 0 a max_y, com marcações de 5 em 5
-#     plt.yticks(np.arange(0, max_y + 5, 5))  # Garante que o max_y apareça
-#
-#     # Grade e layout
-#     plt.grid(axis='y', linestyle='--', linewidth=0.5)
-#     plt.tight_layout()
-#     plt.show()
+
 
 def plot_medias_por_iteracao(
     dados, titulo, ylabel, inicio, fim, passo, max_y, extras=None, usar_fitness=False
 ):
     fig, ax = plt.subplots(figsize=(12, 5))
     ticks_size = 18
-    label_size=ticks_size
+    label_size=30
     if extras is not None:
         iteracoes_desejadas = list(range(inicio, fim, passo)) + extras
     else:
@@ -78,8 +50,8 @@ def plot_medias_por_iteracao(
         ax.set_xticklabels(categorias, fontsize=ticks_size, fontweight='bold')
         ax.set_xlabel("Geração", fontsize=label_size, fontweight='bold')
 
-    ax.set_title(titulo, fontsize=18, fontweight='bold')
-    ax.set_ylabel(ylabel, fontsize=16, fontweight='bold')
+    ax.set_title(titulo, fontsize=label_size, fontweight='bold')
+    ax.set_ylabel(ylabel, fontsize=label_size, fontweight='bold')
     ax.set_ylim(0, max_y)
     ax.set_yticks(np.arange(0, max_y + 5, 5))
     ax.tick_params(axis='y', labelsize=ticks_size)
@@ -106,7 +78,7 @@ def plot_histograma(
 ):
     fig, ax = plt.subplots(figsize=(12, 5))
     tick_size=18
-    label_size=14
+    label_size=30
     if fim is None:
         fim = len(valores) + 1
 
@@ -181,7 +153,6 @@ def parse_tempo_em_timedelta(tempo_str):
     return timedelta()
 
 
-from datetime import timedelta
 
 def parse_tempo_em_timedelta(tempo_str):
     try:
@@ -194,10 +165,8 @@ def parse_tempo_em_timedelta(tempo_str):
     return timedelta()
 
 def plot_tempo_execucao(dados, titulo, ylabel, inicio, fim, passo, extras=None, media=0.0, desvio=0.0, max_horas=20):
-    import matplotlib.pyplot as plt
-    import numpy as np
     tick_size= 18
-    label_size=tick_size
+    label_size=30
     plt.figure(figsize=(12, 5))
 
     if extras is not None:
@@ -222,7 +191,7 @@ def plot_tempo_execucao(dados, titulo, ylabel, inicio, fim, passo, extras=None, 
     plt.gca().yaxis.set_major_formatter(plt.FuncFormatter(format_hms))
     plt.yticks(np.arange(0, max_horas * 3600 + 1, 3600))
 
-    plt.title(titulo, fontsize=16, fontweight='bold')
+    plt.title(titulo, fontsize=label_size, fontweight='bold')
     plt.xlabel(f"Execuções: tempo médio = {media}, desvio padrão = {desvio}", fontsize=label_size, fontweight='bold')
     plt.ylabel(ylabel, fontsize=label_size, fontweight='bold')
     plt.grid(axis='y', linestyle='--', linewidth=0.5)
@@ -236,27 +205,36 @@ def plot_tempo_execucao(dados, titulo, ylabel, inicio, fim, passo, extras=None, 
 
 def plot_pareto(pareto_solucoes: dict, pareto_frentes: dict):
     iteracoes = list(pareto_solucoes.keys())
-
+    tick_size = 18
+    label_size = 30
     plt.figure(figsize=(12, 5))
+
+    # Linha sólida para o 1º Pareto
     plt.plot(iteracoes, list(pareto_solucoes.values()), label="Soluções no 1º Pareto")
-    plt.plot(iteracoes, list(pareto_frentes.values()), label="Número de Frentes")
 
-    plt.title("Evolução do Pareto", fontsize=14, fontweight='bold')
-    plt.xlabel("Iteração", fontsize=12, fontweight='bold')
-    plt.ylabel("Valor", fontsize=12, fontweight='bold')
+    # ALTERAÇÃO: Linha tracejada para "Número de Frentes"
+    plt.plot(iteracoes, list(pareto_frentes.values()), label="Número de Frentes", linestyle='--')
 
-    plt.legend()
+    # Ajuste direto da legenda
+    legenda = plt.legend()
+    for texto in legenda.get_texts():
+        texto.set_fontsize(18)
+        texto.set_fontweight('bold')
+
+    plt.title("Evolução do Pareto: media 30 execuções", fontsize=label_size, fontweight='bold')
+    plt.xlabel("Geração", fontsize=label_size, fontweight='bold')
+    plt.ylabel("Valor", fontsize=label_size, fontweight='bold')
     plt.grid(True)
     plt.tight_layout()
-    # controle de largura da numeração dos eixos:
-    plt.xticks(fontsize=12, fontweight='bold')
-    plt.yticks(fontsize=12, fontweight='bold')
+    plt.xticks(fontsize=14, fontweight='bold')
+    plt.yticks(fontsize=14, fontweight='bold')
     plt.show()
 
 
 
 
-import re
+
+
 
 def extrair_codigo_multiplicado(path: str) -> str:
     match = re.search(r'FUN(\d+)\.CSV$', path, re.IGNORECASE)
@@ -276,8 +254,6 @@ def extrair_numero_execution(path: str) -> int:
         raise ValueError("Não foi possível encontrar o número após 'execution'.")
 
 
-import matplotlib.pyplot as plt
-import itertools
 
 def plotar_frentes_pareto(frentes: list[list[tuple[float, float]]], path: str):
 
