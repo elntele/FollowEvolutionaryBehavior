@@ -1,175 +1,97 @@
-import matplotlib.pyplot as plt
+from matplotlib.font_manager import FontProperties
 import numpy as np
 
 
-def plot_medias_por_iteracao(dados, titulo, ylabel, inicio, fim, passo, max_y, extras=None):
-
-    plt.figure(figsize=(12, 5))
-
-    # Iterações desejadas no eixo X
-    if extras is not None:
-        iteracoes_desejadas = list(range(inicio, fim, passo)) + extras
-    else:
-        iteracoes_desejadas = list(range(inicio, fim, passo))
-
-    valores = [dados.get(i, 0.0) for i in iteracoes_desejadas]
-    categorias = [str(i) for i in iteracoes_desejadas]
-
-    # Criação do gráfico de barras com largura ajustada
-    plt.bar(categorias, valores, width=0.4)
-
-    # Configurações de título e eixos
-    plt.title(titulo, fontsize=18, fontweight='bold')
-    plt.xlabel("Geração", fontsize=16, fontweight='bold')
-    plt.ylabel(ylabel, fontsize=16, fontweight='bold')
-    #controle de largura da numeração dos eixos:
-    plt.xticks(fontsize=12, fontweight='bold')
-    plt.yticks(fontsize=12, fontweight='bold')
-
-    # Eixo Y: de 0 a max_y, com marcações de 5 em 5
-    plt.yticks(np.arange(0, max_y + 5, 5))  # Garante que o max_y apareça
-
-    # Grade e layout
-    plt.grid(axis='y', linestyle='--', linewidth=0.5)
-    plt.tight_layout()
-    plt.show()
-
-
-# import matplotlib.pyplot as plt
-# import numpy as np
 #
-# def plot_histograma(
-#     valores: list,
-#     titulo: str,
-#     ylabel: str,
-#     max_y: float = 100,
-#     inicio: int = 1,
-#     fim: int = None,
-#     passo: int = 1,
-#     extras: list = None,
-#     usar_fitness: bool = False
-# ):
+# def plot_medias_por_iteracao(dados, titulo, ylabel, inicio, fim, passo, max_y, extras=None):
+#
 #     plt.figure(figsize=(12, 5))
 #
-#     # Define os índices (categorias) para o eixo X
-#     if fim is None:
-#         fim = len(valores) + 1
-#
+#     # Iterações desejadas no eixo X
 #     if extras is not None:
-#         iteracoes = list(range(inicio, fim, passo)) + extras
+#         iteracoes_desejadas = list(range(inicio, fim, passo)) + extras
 #     else:
-#         iteracoes = list(range(inicio, fim, passo))
+#         iteracoes_desejadas = list(range(inicio, fim, passo))
 #
-#     categorias = [str(i) for i in iteracoes]
+#     valores = [dados.get(i, 0.0) for i in iteracoes_desejadas]
+#     categorias = [str(i) for i in iteracoes_desejadas]
 #
-#     if usar_fitness:
-#         # Mostra os valores na ordem em que aparecem (sem indexar pela fitness)
-#         yvalores = valores[:len(iteracoes)]
-#     else:
-#         # Indexa pela iteração normal
-#         yvalores = [valores[i - 1] if 1 <= i <= len(valores) else 0.0 for i in iteracoes]
+#     # Criação do gráfico de barras com largura ajustada
+#     plt.bar(categorias, valores, width=0.4)
 #
-#     # Criação do gráfico
-#     plt.bar(categorias, yvalores, width=0.4)
+#     # Configurações de título e eixos
+#     plt.title(titulo, fontsize=18, fontweight='bold')
+#     plt.xlabel("Geração", fontsize=16, fontweight='bold')
+#     plt.ylabel(ylabel, fontsize=16, fontweight='bold')
+#     #controle de largura da numeração dos eixos:
+#     plt.xticks(fontsize=12, fontweight='bold')
+#     plt.yticks(fontsize=12, fontweight='bold')
 #
-#     # Títulos e rótulos com estilo
-#     plt.title(titulo, fontsize=14, fontweight='bold')
-#     eixo_x = "Avaliação de aptidão" if usar_fitness else "Execução"
-#     plt.xlabel(eixo_x, fontsize=12, fontweight='bold')
-#     plt.ylabel(ylabel, fontsize=12, fontweight='bold')
-#
-#     # Eixo Y com intervalo adequado
-#     plt.ylim(0, max_y)
-#     plt.yticks(np.linspace(0, max_y, 6))
+#     # Eixo Y: de 0 a max_y, com marcações de 5 em 5
+#     plt.yticks(np.arange(0, max_y + 5, 5))  # Garante que o max_y apareça
 #
 #     # Grade e layout
 #     plt.grid(axis='y', linestyle='--', linewidth=0.5)
 #     plt.tight_layout()
 #     plt.show()
 
+def plot_medias_por_iteracao(
+    dados, titulo, ylabel, inicio, fim, passo, max_y, extras=None, usar_fitness=False
+):
+    fig, ax = plt.subplots(figsize=(12, 5))
+    ticks_size = 18
+    label_size=ticks_size
+    if extras is not None:
+        iteracoes_desejadas = list(range(inicio, fim, passo)) + extras
+    else:
+        iteracoes_desejadas = list(range(inicio, fim, passo))
 
-# import matplotlib.pyplot as plt
-# import numpy as np
-#
-# def formatar_expoente(valor: int) -> str:
-#     if valor == 0:
-#         return "0"
-#
-#     expoente = int(np.floor(np.log10(valor)))
-#     base = valor / (10 ** expoente)
-#
-#     # Converte expoente para sobrescrito
-#     expoente_formatado = ''.join({
-#         '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
-#         '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹'
-#     }.get(c, '') for c in str(expoente))
-#
-#     # Formata a base com 1 casa decimal (e remove .0 se não for necessário)
-#     base_str = f"{base:.1f}".rstrip('0').rstrip('.')
-#     return f"{base_str}×10{expoente_formatado}"
-#
-#
-# def plot_histograma(
-#     valores: list,
-#     titulo: str,
-#     ylabel: str,
-#     max_y: float = 100,
-#     inicio: int = 1,
-#     fim: int = None,
-#     passo: int = 1,
-#     extras: list = None,
-#     usar_fitness: bool = False
-# ):
-#     plt.figure(figsize=(12, 5))
-#
-#     if fim is None:
-#         fim = len(valores) + 1
-#
-#     extras = extras or []
-#
-#     # Gera os índices principais e extras
-#     base_indices = list(range(inicio, fim + 1, passo))
-#     all_indices = base_indices + extras
-#
-#     # Calcula yvalores corretamente
-#     if usar_fitness:
-#         yvalores = []
-#         for i in all_indices:
-#             if i in base_indices:
-#                 idx = (i - inicio) // passo
-#                 if 0 <= idx < len(valores):
-#                     yvalores.append(valores[idx])
-#                 else:
-#                     yvalores.append(0.0)
-#             else:
-#                 yvalores.append(0.0)
-#         categorias = [formatar_expoente(i) for i in all_indices]
-#     else:
-#         yvalores = [valores[i - 1] if 1 <= i <= len(valores) else 0.0 for i in all_indices]
-#         categorias = [str(i) for i in all_indices]
-#
-#     # Criação do gráfico
-#     plt.bar(categorias, yvalores, width=0.4)
-#
-#     # Aplica rotação nos rótulos do eixo X apenas para notação científica
-#     if usar_fitness:
-#         plt.xticks(rotation=45)
-#
-#     # Títulos e rótulos com estilo
-#     plt.title(titulo, fontsize=14, fontweight='bold')
-#     eixo_x = "Avaliação de aptidão" if usar_fitness else "Execução"
-#     plt.xlabel(eixo_x, fontsize=12, fontweight='bold')
-#     plt.ylabel(ylabel, fontsize=12, fontweight='bold')
-#
-#     plt.ylim(0, max_y)
-#     plt.yticks(np.linspace(0, max_y, 6))
-#
-#     plt.grid(axis='y', linestyle='--', linewidth=0.5)
-#     plt.tight_layout()
-#     plt.show()
+    if usar_fitness:
+        # Mapeia avaliação de aptidão (ex: 200) para geração (200 // 100 = 2)
+        valores = [dados.get(i // 100, 0.0) for i in iteracoes_desejadas]
+        categorias = [format(i, '.1e').replace('.', ',').replace('e', 'E') for i in iteracoes_desejadas]
+        ax.set_xticks([])
 
-import matplotlib.pyplot as plt
-import numpy as np
+        bars = ax.bar(range(len(categorias)), valores, width=0.4)
+
+        for i, label in enumerate(categorias):
+            ax.text(
+                i + 0.3,
+                -max_y * 0.0,
+                label,
+                fontsize=ticks_size,
+                fontweight='bold',
+                rotation=45,
+                ha='right',
+                va='top',
+                transform=ax.transData,
+                clip_on=False
+            )
+
+        plt.subplots_adjust(bottom=0.7)
+        ax.set_xlabel("Avaliação de aptidão", fontsize=label_size, fontweight='bold', labelpad=80)
+    else:
+        valores = [dados.get(i, 0.0) for i in iteracoes_desejadas]
+        categorias = [str(i) for i in iteracoes_desejadas]
+        bars = ax.bar(categorias, valores, width=0.4)
+        ax.set_xticks(range(len(categorias)))
+        ax.set_xticklabels(categorias, fontsize=ticks_size, fontweight='bold')
+        ax.set_xlabel("Geração", fontsize=label_size, fontweight='bold')
+
+    ax.set_title(titulo, fontsize=18, fontweight='bold')
+    ax.set_ylabel(ylabel, fontsize=16, fontweight='bold')
+    ax.set_ylim(0, max_y)
+    ax.set_yticks(np.arange(0, max_y + 5, 5))
+    ax.tick_params(axis='y', labelsize=ticks_size)
+    [label.set_fontweight('bold') for label in ax.get_yticklabels()]
+
+    ax.grid(axis='y', linestyle='--', linewidth=0.5)
+
+    plt.tight_layout()
+    plt.show()
+
+
+
 
 def plot_histograma(
     valores: list,
@@ -182,8 +104,9 @@ def plot_histograma(
     extras: list = None,
     usar_fitness: bool = False
 ):
-    plt.figure(figsize=(12, 5))
-
+    fig, ax = plt.subplots(figsize=(12, 5))
+    tick_size=18
+    label_size=14
     if fim is None:
         fim = len(valores) + 1
 
@@ -199,31 +122,52 @@ def plot_histograma(
                 yvalores.append(valores[idx] if 0 <= idx < len(valores) else 0.0)
             else:
                 yvalores.append(0.0)
-        # Notação científica padrão com "e" (ex: 1e3)
         categorias = [format(i, '.1e').replace('.', ',').replace('e', 'E') for i in all_indices]
-
     else:
         yvalores = [valores[i - 1] if 1 <= i <= len(valores) else 0.0 for i in all_indices]
         categorias = [str(i) for i in all_indices]
 
-    plt.bar(categorias, yvalores, width=0.4)
+    bars = ax.bar(range(len(categorias)), yvalores, width=0.4)
 
-    # Rotação apenas se for em notação científica
     if usar_fitness:
-        plt.xticks(rotation=45)
+        ax.set_xticks([])  # Remove os ticks automáticos
 
-    plt.title(titulo, fontsize=14, fontweight='bold')
-    eixo_x = "Avaliação de aptidão" if usar_fitness else "Execução"
-    plt.xlabel(eixo_x, fontsize=12, fontweight='bold')
-    plt.ylabel(ylabel, fontsize=12, fontweight='bold')
-    plt.ylim(0, max_y)
-    plt.yticks(np.linspace(0, max_y, 6))
-    plt.grid(axis='y', linestyle='--', linewidth=0.5)
+        for i, label in enumerate(categorias):
+            ax.text(
+                i + 0.3,
+                -max_y * 0.0,  # levemente acima da base
+                label,
+                fontsize=tick_size,
+                fontweight='bold',
+                rotation=45,
+                ha='right',
+                va='top',
+                transform=ax.transData,
+                clip_on=False
+            )
+
+        # Aumenta a margem inferior para caber ticks E legenda
+        plt.subplots_adjust(bottom=0.7)
+
+        # Define a legenda do eixo X ainda mais abaixo
+        eixo_x = "Avaliação de aptidão"
+        ax.set_xlabel(eixo_x, fontsize=label_size, fontweight='bold', labelpad=80)
+    else:
+        ax.set_xticks(range(len(categorias)))
+        ax.set_xticklabels(categorias, fontsize=label_size, fontweight='bold')
+        ax.set_xlabel("Execução", fontsize=label_size, fontweight='bold')
+
+    ax.set_title(titulo, fontsize=label_size, fontweight='bold')
+    ax.set_ylabel(ylabel, fontsize=label_size, fontweight='bold')
+    ax.set_ylim(0, max_y)
+    ax.set_yticks(np.linspace(0, max_y, 6))
+    ax.tick_params(axis='y', labelsize=tick_size)
+    [label.set_fontweight('bold') for label in ax.get_yticklabels()]
+    ax.grid(axis='y', linestyle='--', linewidth=0.5)
+
     plt.tight_layout()
-    # controle de largura da numeração dos eixos:
-    plt.xticks(fontsize=12, fontweight='bold')
-    plt.yticks(fontsize=12, fontweight='bold')
     plt.show()
+
 
 
 def parse_tempo_em_timedelta(tempo_str):
@@ -252,7 +196,8 @@ def parse_tempo_em_timedelta(tempo_str):
 def plot_tempo_execucao(dados, titulo, ylabel, inicio, fim, passo, extras=None, media=0.0, desvio=0.0, max_horas=20):
     import matplotlib.pyplot as plt
     import numpy as np
-
+    tick_size= 18
+    label_size=tick_size
     plt.figure(figsize=(12, 5))
 
     if extras is not None:
@@ -277,14 +222,14 @@ def plot_tempo_execucao(dados, titulo, ylabel, inicio, fim, passo, extras=None, 
     plt.gca().yaxis.set_major_formatter(plt.FuncFormatter(format_hms))
     plt.yticks(np.arange(0, max_horas * 3600 + 1, 3600))
 
-    plt.title(titulo)
-    plt.xlabel(f"Execuções: tempo médio = {media}, desvio padrão = {desvio}")
-    plt.ylabel(ylabel)
+    plt.title(titulo, fontsize=16, fontweight='bold')
+    plt.xlabel(f"Execuções: tempo médio = {media}, desvio padrão = {desvio}", fontsize=label_size, fontweight='bold')
+    plt.ylabel(ylabel, fontsize=label_size, fontweight='bold')
     plt.grid(axis='y', linestyle='--', linewidth=0.5)
     plt.tight_layout()
     # controle de largura da numeração dos eixos:
-    plt.xticks(fontsize=12, fontweight='bold')
-    plt.yticks(fontsize=12, fontweight='bold')
+    plt.xticks(fontsize=tick_size, fontweight='bold')
+    plt.yticks(fontsize=tick_size, fontweight='bold')
     plt.show()
 
 
@@ -309,44 +254,36 @@ def plot_pareto(pareto_solucoes: dict, pareto_frentes: dict):
     plt.show()
 
 
-# import matplotlib.pyplot as plt
-#
-# def plotar_frentes_pareto(frentes: list[list[tuple[float, float]]]):
-#     """
-#     Plota dois gráficos:
-#     1. Todas as frentes de Pareto
-#     2. Apenas a primeira frente (mais convergida)
-#     """
-#     # Gráfico com todas as frentes
-#     plt.figure(figsize=(10, 5))
-#     for idx, frente in enumerate(frentes):
-#         xs, ys = zip(*frente)
-#         plt.scatter(xs, ys, label=f"Frente {idx+1}", s=20)
-#     plt.title("Todas as Frentes de Pareto")
-#     plt.xlabel("Probabilidade de Bloqueio")
-#     plt.ylabel("CAPEX")
-#     plt.legend()
-#     plt.grid(True)
-#     plt.tight_layout()
-#     plt.show()
-#
-#     # Gráfico com apenas a primeira frente
-#     if frentes:
-#         xs, ys = zip(*frentes[0])
-#         plt.figure(figsize=(8, 5))
-#         plt.scatter(xs, ys, color='blue')
-#         plt.title("Frente de Pareto Mais Convergida")
-#         plt.xlabel("Probabilidade de Bloqueio")
-#         plt.ylabel("CAPEX")
-#         plt.grid(True)
-#         plt.tight_layout()
-#         plt.show()
+
+
+import re
+
+def extrair_codigo_multiplicado(path: str) -> str:
+    match = re.search(r'FUN(\d+)\.CSV$', path, re.IGNORECASE)
+    if match:
+        numero = int(match.group(1))
+        resultado = str(numero * 100)
+        return resultado
+    else:
+        raise ValueError("O caminho não termina com 'FUN<numero>.CSV'")
+
+
+def extrair_numero_execution(path: str) -> int:
+    match = re.search(r'execution(\d+)', path, re.IGNORECASE)
+    if match:
+        return int(match.group(1))
+    else:
+        raise ValueError("Não foi possível encontrar o número após 'execution'.")
 
 
 import matplotlib.pyplot as plt
 import itertools
 
-def plotar_frentes_pareto(frentes: list[list[tuple[float, float]]]):
+def plotar_frentes_pareto(frentes: list[list[tuple[float, float]]], path: str):
+
+    aval_aptidao= extrair_codigo_multiplicado(path)
+    execucao= extrair_numero_execution(path)
+
     """
     Plota dois gráficos:
     1. Todas as frentes de Pareto com cores e marcadores diferentes
@@ -358,7 +295,8 @@ def plotar_frentes_pareto(frentes: list[list[tuple[float, float]]]):
 
     # Grava o estilo da primeira frente
     marcador_convergido, cor_convergida = next(estilos)
-
+    fonte_legenda_size=28
+    ticks_size=fonte_legenda_size
     # Gráfico com todas as frentes
     plt.figure(figsize=(10, 6))
     for idx, frente in enumerate(frentes):
@@ -369,16 +307,21 @@ def plotar_frentes_pareto(frentes: list[list[tuple[float, float]]]):
             marcador, cor = next(estilos)
         #s=60 define o tamanho dos marcadores (pontos) para todas as frentes.
         plt.scatter(xs, ys, label=f"Frente {idx + 1}", marker=marcador, color=cor, s=60)
-
-    plt.title("Todas as Frentes de Pareto", fontsize=14, fontweight='bold')
-    plt.xlabel("Probabilidade de Bloqueio", fontsize=12, fontweight='bold')
-    plt.ylabel("CAPEX", fontsize=12, fontweight='bold')
+    # Ajusta a legenda diretamente
+    legenda = plt.legend()
+    for texto in legenda.get_texts():
+        texto.set_fontsize(120)
+        texto.set_fontweight('bold')
+    plt.title(f"Todas as Frentes Não Dominadas: Execução {execucao} Avaliação de Aptidão {aval_aptidao}", fontsize=fonte_legenda_size, fontweight='bold')
+    plt.xlabel("Probabilidade de Bloqueio", fontsize=fonte_legenda_size, fontweight='bold')
+    plt.ylabel("CAPEX", fontsize=fonte_legenda_size, fontweight='bold')
+    plt.rc('legend', fontsize=18)  # Tamanho da fonte da legenda para o modal frente1, frente 2...
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
     # controle de largura da numeração dos eixos:
-    plt.xticks(fontsize=12, fontweight='bold')
-    plt.yticks(fontsize=12, fontweight='bold')
+    plt.xticks(fontsize=ticks_size, fontweight='bold')
+    plt.yticks(fontsize=ticks_size, fontweight='bold')
     plt.show()
 
     # Gráfico com apenas a primeira frente, com o mesmo estilo usado antes
@@ -386,12 +329,12 @@ def plotar_frentes_pareto(frentes: list[list[tuple[float, float]]]):
         xs, ys = zip(*frentes[0])
         plt.figure(figsize=(8, 5))
         plt.scatter(xs, ys, color=cor_convergida, marker=marcador_convergido, s=80)
-        plt.title("Frente de Pareto Mais Convergida", fontsize=14, fontweight='bold')
-        plt.xlabel("Probabilidade de Bloqueio", fontsize=12, fontweight='bold')
-        plt.ylabel("CAPEX", fontsize=12, fontweight='bold')
+        plt.title(f"Frente Mais Convergida: Execução {execucao} Avaliação de Aptidão {aval_aptidao}", fontsize=fonte_legenda_size, fontweight='bold')
+        plt.xlabel("Probabilidade de Bloqueio", fontsize=fonte_legenda_size, fontweight='bold')
+        plt.ylabel("CAPEX", fontsize=fonte_legenda_size, fontweight='bold')
         plt.grid(True)
         plt.tight_layout()
         # controle de largura da numeração dos eixos:
-        plt.xticks(fontsize=12, fontweight='bold')
-        plt.yticks(fontsize=12, fontweight='bold')
+        plt.xticks(fontsize=ticks_size, fontweight='bold')
+        plt.yticks(fontsize=ticks_size, fontweight='bold')
         plt.show()

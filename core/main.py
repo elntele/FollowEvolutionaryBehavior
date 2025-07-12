@@ -28,16 +28,17 @@ print(resumo['pareto_frentes'])
 
 plot_medias_por_iteracao(
     resumo['medias_qtd_sol_com_restri_ca'],
-    "Média de soluções com restrição de conectividade algébrica por iteração",
+    "Média da quantidade de soluções com restrição de conectividade algébrica por geração",
     "Número de soluções com nós isolados",
-    2, 21, 1, 100, [40, 200, 500, 1000]
+    200, 2001, 100, 100,  extras=[8000, 20000, 100000],
+    usar_fitness=True
 )
 
 plot_medias_por_iteracao(
     resumo['medias_qtd_sol_com_restri_equinad'],
     "Média de soluções com inadequação de equipamentos por geração",
     "Quantidade de soluções com restrição 2",
-    2, 41, 1, 100, [80, 200, 500, 1000]
+    200, 4001, 100, 100, [8000, 20000, 50000, 100000], True
 )
 
 plot_tempo_execucao(
@@ -52,11 +53,11 @@ plot_tempo_execucao(
 
 plot_histograma(
     resumo['medias_de_valores_de_restr_eq_inadeq'],
-    "Média da méria dos valores de restrição de inadequação de equipamentos a cada geração",
-    "Valor médio de inadequação",
+    "Valor médio das 30 execuções da média dos valores restrição de inadequação de equipamentos das 100 soluções a cada marco de avaliação de aptidão",
+    "Valor médio da média de inadequação nas 30 execuções",
     max_y=0.6,
     inicio=200,
-    fim=4000,
+    fim=4001,
     passo=100,
     extras=[8000, 20000, 100000],
     usar_fitness=True
@@ -64,13 +65,14 @@ plot_histograma(
 
 plot_histograma(
     resumo['std_da_media_dos_valores_de_restri_de_eq_inadeq'],
-    "Média das 30 execuções do desvio padrão dos valores de restrição de inadequação de equipamentos a cada geração",
+    "Valor médio das 30 execuções do desvio padrão dos valores de restrição de inadequação de equipamentos a cada marco de avaliação de aptidão",
     "Desvio padrão da inadequação",
     max_y=0.12,
-    inicio=2,
-    fim=41,
-    passo=1,
-    extras=[80, 200, 1000]
+    inicio=200,
+    fim=4001,
+    passo=100,
+    extras=[8000, 20000, 100000],
+    usar_fitness=True
 )
 
 plot_pareto(
@@ -78,7 +80,7 @@ plot_pareto(
     resumo['pareto_frentes']
 )
 
-pathParetos = "C:/Users/elnte/Desktop/result 24.6.25/SBX_CROS+MN-C/VARSandFUNS/execution5/FUN520.CSV"
+pathParetos = "C:/Users/elnte/Desktop/result 24.6.25/SBX_CROS+INTE_POL_MUT/VARSandFUNS/execution14/FUN1000.CSV"
 
 try:
     # Etapa 1: Leitura do arquivo
@@ -88,7 +90,7 @@ try:
     frentes = separa_frentes(linhas)
 
     # Etapa 3: Plotagem dos gráficos
-    plotar_frentes_pareto(frentes)
+    plotar_frentes_pareto(frentes, pathParetos)
 
 except FileNotFoundError:
     print(f"Arquivo {pathParetos} não encontrado. Pulando visualização de frentes.")
