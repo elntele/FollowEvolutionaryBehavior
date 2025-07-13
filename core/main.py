@@ -2,7 +2,8 @@ from core.file_loader import find_execution_files, ler_paretos
 from core.analysis import analisar_execucoes, separa_frentes
 from core.plotter import *
 
-arquivos = find_execution_files(r'C:\Users\elnte\Desktop\result 24.6.25\CN-C+MN-C')
+#arquivos = find_execution_files(r'C:\Users\elnte\Desktop\result 24.6.25\CN-C+MN-C')
+arquivos = find_execution_files(r'C:\Users\elnte\Desktop\result 24.6.25\SBX_CROS+INTE_POL_MUT')
 resumo = analisar_execucoes(arquivos)
 
 print("Tempo médio de execução por abordagem (hh:mm:ss):", resumo['media_execucao_hhmmss'])
@@ -38,13 +39,13 @@ plot_medias_por_iteracao(
     resumo['medias_qtd_sol_com_restri_equinad'],
     "Média de soluções com inadequação de equipamentos\n por marco de avaliação de aptidão",
     "Quantidade de soluções\n com restrição 2",
-    200, 4001, 100, 100, [8000, 20000, 50000, 100000], True
+    200, 4001, 100, 100, [8000, 20000, 52000, 100000], True
 )
 
 plot_tempo_execucao(
     resumo['tempos_execucao'],
     "Tempo de execução de cada uma das 30 execuções",
-    "Tempo de execução (hh:mm:ss)",
+    "Tempo de execução (dd:hh:mm:ss)",
     1, 31, 1,
     media=resumo["media_execucao_hhmmss"],
     desvio=resumo['std_execucao_hhmmss'],
@@ -54,7 +55,7 @@ plot_tempo_execucao(
 plot_histograma(
     resumo['medias_de_valores_de_restr_eq_inadeq'],
     "Valor médio das 30 execuções da média dos valores restrição\n de inadequação de equipamentos das 100 soluções\n a cada marco de avaliação de aptidão",
-    "Valor médio da média de\n inadequação nas 30 execuções",
+    "Valor médio da média\n de inadequação\n nas 30 execuções",
     max_y=0.6,
     inicio=200,
     fim=4001,

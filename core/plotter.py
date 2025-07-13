@@ -93,9 +93,12 @@ def plot_histograma(
                 idx = (i - inicio) // passo
                 yvalores.append(valores[idx] if 0 <= idx < len(valores) else 0.0)
             else:
-                yvalores.append(0.0)
+                idx = 38 + ((i // 100) // 40) - 1
+                yvalores.append(valores[idx] if 0 <= idx < len(valores) else 0.0)
         categorias = [format(i, '.1e').replace('.', ',').replace('e', 'E') for i in all_indices]
     else:
+        #aqui tem uma falha se for pegar por geração porque acima da geração 40 é a 80 e não a 41
+        #mas como vou avalizar por marco de fitness não vou tratar
         yvalores = [valores[i - 1] if 1 <= i <= len(valores) else 0.0 for i in all_indices]
         categorias = [str(i) for i in all_indices]
 
@@ -156,17 +159,28 @@ def parse_tempo_em_timedelta(tempo_str):
 
 def parse_tempo_em_timedelta(tempo_str):
     try:
+        # Caso com dias, ex: "2 days, 23:44:37.455000"
+        if "days" in tempo_str:
+            dias_str, tempo_str = tempo_str.split(", ")
+            dias = int(dias_str.split()[0])
+        else:
+            dias = 0
+
         partes = tempo_str.split(":")
         if len(partes) == 3:
             horas, minutos, segundos = map(float, partes)
-            return timedelta(hours=horas, minutes=minutos, seconds=segundos)
+            return timedelta(days=dias, hours=horas, minutes=minutos, seconds=segundos)
+
     except Exception as e:
         print(f"Erro ao converter tempo '{tempo_str}': {e}")
+
     return timedelta()
 
+
+
 def plot_tempo_execucao(dados, titulo, ylabel, inicio, fim, passo, extras=None, media=0.0, desvio=0.0, max_horas=20):
-    tick_size= 18
-    label_size=30
+    tick_size = 18
+    label_size = 30
     plt.figure(figsize=(12, 5))
 
     if extras is not None:
@@ -184,22 +198,48 @@ def plot_tempo_execucao(dados, titulo, ylabel, inicio, fim, passo, extras=None, 
     # Criação do gráfico de barras
     plt.bar(categorias, tempos, width=0.4)
 
-    # Eixo Y: formatação como hh:mm:ss
-    def format_hms(x, _):
-        return str(timedelta(seconds=int(x)))
+    # Eixo Y: formatação como [Xd\nhh:mm:ss] ou [hh:mm:ss]
+    def formatar_tempo(segundos, _):
+        if segundos == 0:
+            return "0d"
 
-    plt.gca().yaxis.set_major_formatter(plt.FuncFormatter(format_hms))
-    plt.yticks(np.arange(0, max_horas * 3600 + 1, 3600))
+        dias = int(segundos) // 86400
+        resto = int(segundos) % 86400
+        horas = resto // 3600
+        minutos = (resto % 3600) // 60
+        segundos_restantes = resto % 60
+
+        if dias > 0:
+            if horas == 0 and minutos == 0 and segundos_restantes == 0:
+                return f"{dias}d"
+            else:
+                return f"{dias}d\n{horas:02}:{minutos:02}:{segundos_restantes:02}"
+        else:
+            return f"{horas:02}:{minutos:02}:{segundos_restantes:02}"
+
+    plt.gca().yaxis.set_major_formatter(plt.FuncFormatter(formatar_tempo))
+
+    # Define intervalo dos ticks com base no tempo máximo
+    tempo_max = max(tempos)
+    if tempo_max >= 86400:  # 1 dia
+        passo_ticks = 86400  # 1 dia
+    else:
+        passo_ticks = 3600   # 1 hora
+
+    plt.yticks(np.arange(0, tempo_max + passo_ticks, passo_ticks))
 
     plt.title(titulo, fontsize=label_size, fontweight='bold')
     plt.xlabel(f"Execuções: tempo médio = {media}, desvio padrão = {desvio}", fontsize=label_size, fontweight='bold')
     plt.ylabel(ylabel, fontsize=label_size, fontweight='bold')
     plt.grid(axis='y', linestyle='--', linewidth=0.5)
     plt.tight_layout()
-    # controle de largura da numeração dos eixos:
+
+    # Controle de formatação dos eixos
     plt.xticks(fontsize=tick_size, fontweight='bold')
     plt.yticks(fontsize=tick_size, fontweight='bold')
+
     plt.show()
+
 
 
 
